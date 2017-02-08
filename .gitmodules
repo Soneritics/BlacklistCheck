@@ -1,0 +1,3 @@
+[submodule "ServerMonitorShared"]
+	path = ServerMonitorShared
+	url = https://github.com/Soneritics/ServerMonitorShared
