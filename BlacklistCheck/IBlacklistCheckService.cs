@@ -1,4 +1,5 @@
-﻿using ServerMonitorShared;
+﻿using BlacklistCheck.Blacklist;
+using ServerMonitorShared;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -10,21 +11,13 @@ namespace BlacklistCheck
     public interface IBlacklistCheckService
     {
         [OperationContract]
-        bool isBlacklisted(string ip);
+        bool isIpBlacklisted(string ip);
 
         [OperationContract]
-        bool isBlacklisted(Server server);
+        bool isServerBlacklisted(Server server);
 
         List<BlacklistedServer> getBlacklistedServers(List<Server> servers);
 
         List<BlacklistedServer> getBlacklistedIPs(List<String> ips);
-    }
-
-    [DataContract]
-    public class BlacklistedServer
-    {
-        public Server server { get; private set; }
-        public List<String> servicesChecked { get; private set; }  = new List<String>();
-        public List<String> blacklisted { get; private set; } = new List<String>();
     }
 }
