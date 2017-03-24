@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ServerMonitorShared;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Linq;
 
 namespace BlacklistCheck.Blacklist
 {
@@ -9,10 +11,15 @@ namespace BlacklistCheck.Blacklist
     {
         private static Dictionary<String, BlacklistCheck> BlacklistChecks = new Dictionary<String, BlacklistCheck>();
 
-        public static BlacklistCheck Create()
+        public static BlacklistCheck Create(List<Server> servers)
         {
-            var config = getConfiguration();
-            return new BlacklistCheck();
+            var hash = calculateHash(servers);
+            if (!BlacklistChecks.ContainsKey(hash))
+            {
+                BlacklistChecks[hash] = new BlacklistCheck(getConfiguration(), servers);
+            }
+
+            return BlacklistChecks[hash];
         }
 
         private static BlacklistCheckFactoryConfiguration getConfiguration()
@@ -36,24 +43,13 @@ namespace BlacklistCheck.Blacklist
 
             return result;
         }
-    }
 
-    class BlacklistServer
-    {
-        public String Name;
-        public String DNS;
-    }
-
-    class BlacklistCheckFactoryConfiguration
-    {
-        public String hash;
-        public int CheckTimeoutMinutes;
-        public List<BlacklistServer> BlacklistServers;
-
-        public BlacklistCheckFactoryConfiguration(List<BlacklistServer> blacklistServers, int checkTimeoutMinutes)
+        private static string calculateHash(List<Server> servers)
         {
-            CheckTimeoutMinutes = checkTimeoutMinutes;
-            BlacklistServers = blacklistServers;
+            return String.Join("|",
+                (from s in servers
+                 orderby s.ToString()
+                 select s.ToString()).ToArray());
         }
     }
 }

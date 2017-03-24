@@ -19,8 +19,8 @@ namespace BlacklistCheck
 
         public List<BlacklistedServer> getBlacklistedServers(List<Server> servers)
         {
-            var bc = BlacklistCheckFactory.Create();
-            throw new NotImplementedException();
+            var bc = BlacklistCheckFactory.Create(servers);
+            return bc.getBlacklistedServers();
         }
 
         public bool isServerBlacklisted(Server server)
@@ -30,7 +30,7 @@ namespace BlacklistCheck
 
         public bool isIpBlacklisted(string ip)
         {
-            return getBlacklistedIPs(new List<String>() { ip }).Count == 1;
+            return getBlacklistedIPs(new List<String>() { ip }).Where((bs) => bs.blacklisted.Count() > 0).Count() > 0;
         }
     }
 }
