@@ -16,8 +16,10 @@ namespace BlacklistCheck
         [OperationContract]
         bool isServerBlacklisted(Server server);
 
+        [OperationContract]
         List<BlacklistedServer> getBlacklistedServers(List<Server> servers);
 
+        [OperationContract]
         List<BlacklistedServer> getBlacklistedIPs(List<String> ips);
     }
 }
